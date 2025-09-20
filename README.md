@@ -1,6 +1,6 @@
 # Ubuntu Startup Setup
 
-This project provides scripts and instructions to automate the initial setup of an Ubuntu system.
+A simple setup script to configure a fresh Ubuntu installation with ohmyzsh, themes, plugins, and fastfetch for a beautiful terminal startup experience.
 
 ## Features
 
