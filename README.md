@@ -12,7 +12,7 @@ A simple setup script to configure a fresh Ubuntu installation with ohmyzsh, the
 
 1. Clone this repository:
     ```bash
-    git clone https://github.com/yourusername/ubuntu_startup_setup.git
+    git clone https://github.com/NurMd07/ubuntu_startup_setup.git
     ```
 2. Run the setup script:
     ```bash
