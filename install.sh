@@ -78,11 +78,12 @@ fastfetch_setup() {
     # Fetch the latest release info from GitHub
     release_info=$(curl -sL https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest)
 
-    # Extract the .deb URL for your architecture
+    # Extract the .deb URL for your architecture and remove any carriage returns
     latest_url=$(echo "$release_info" \
         | grep "browser_download_url.*deb" \
         | grep "$arch" \
-        | cut -d '"' -f 4)
+        | cut -d '"' -f 4 \
+        | tr -d '\r\n')
 
     # Check if URL is found
     if [[ -z "$latest_url" ]]; then
@@ -92,12 +93,21 @@ fastfetch_setup() {
 
     echo "Downloading Fastfetch from: $latest_url"
 
-    curl -L "$latest_url" -o /tmp/fastfetch.deb
-    sudo_pass dpkg -i /tmp/fastfetch.deb || sudo_pass apt-get install -f -y
-    rm /tmp/fastfetch.deb
+    # Temporary file
+    TMP_DEB=$(mktemp)
 
-    echo "✅ Fastfetch installed!"
+    # Download the .deb
+    curl -L -o "$TMP_DEB" "$latest_url"
+
+    # Install and fix dependencies
+    sudo dpkg -i "$TMP_DEB" || sudo apt-get install -f -y
+
+    # Clean up
+    rm "$TMP_DEB"
+
+    echo "✅ Fastfetch installed successfully!"
 }
+
 
 
 configs_setup(){
