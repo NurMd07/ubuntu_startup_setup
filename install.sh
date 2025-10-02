@@ -79,11 +79,11 @@ fastfetch_setup() {
     release_info=$(curl -sL https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest)
 
     # Extract the .deb URL for your architecture and remove any carriage returns
-    latest_url=$(echo "$release_info" \
-        | grep "browser_download_url.*deb" \
-        | grep "$arch" \
-        | cut -d '"' -f 4 \
-        | tr -d '\r\n')
+latest_url=$(echo "$release_info" \
+    | grep "browser_download_url.*${arch}-polyfilled.deb" \
+    | cut -d '"' -f 4 \
+    | tr -d '\r\n')
+
 
     # Check if URL is found
     if [[ -z "$latest_url" ]]; then
