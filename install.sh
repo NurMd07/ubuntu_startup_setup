@@ -72,23 +72,33 @@ EOF
 
 }
 
-fastfetch_setup(){
+fastfetch_setup() {
+    arch=$(dpkg --print-architecture)
 
-	arch=$(dpkg --print-architecture)  
-	# get competible fastfetch package .deb
-	latest_url=$(curl -sL https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest \
-	| grep "browser_download_url.*deb" \
-	| grep "$arch" \
-	| cut -d '"' -f 4)
+    # Fetch the latest release info from GitHub
+    release_info=$(curl -sL https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest)
 
-	echo "Downloading Fastfetch from: $latest_url"
+    # Extract the .deb URL for your architecture
+    latest_url=$(echo "$release_info" \
+        | grep "browser_download_url.*deb" \
+        | grep "$arch" \
+        | cut -d '"' -f 4)
 
-	curl -L "$latest_url" -o /tmp/fastfetch.deb
-	sudo_pass dpkg -i /tmp/fastfetch.deb || sudo_pass apt-get install -f -y
-	rm /tmp/fastfetch.deb
+    # Check if URL is found
+    if [[ -z "$latest_url" ]]; then
+        echo "❌ Could not find a Fastfetch .deb for architecture: $arch"
+        return 1
+    fi
 
-	echo "✅ Fastfetch installed!"
+    echo "Downloading Fastfetch from: $latest_url"
+
+    curl -L "$latest_url" -o /tmp/fastfetch.deb
+    sudo_pass dpkg -i /tmp/fastfetch.deb || sudo_pass apt-get install -f -y
+    rm /tmp/fastfetch.deb
+
+    echo "✅ Fastfetch installed!"
 }
+
 
 configs_setup(){
 	
