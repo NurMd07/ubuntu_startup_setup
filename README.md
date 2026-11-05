@@ -20,7 +20,7 @@ A simple setup script to configure a fresh Ubuntu installation with ohmyzsh, the
     chmod +x install.sh
     ./install.sh
     ```
-3. Finzalize:
+3. Finalize:
     ```bash
     zsh
     ```
